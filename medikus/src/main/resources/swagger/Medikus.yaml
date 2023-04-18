@@ -1,0 +1,332 @@
+openapi: 3.0.0
+x-stoplight:
+  id: ron0qhxm2b6ky
+info:
+  title: Medikus
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /patient:
+    get:
+      summary: retrievePatient
+      tags: []
+      operationId: retrievePatient
+      parameters:
+        - schema:
+            type: string
+            format: int64
+          in: query
+          name: ssn
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievePatientResponse'
+    post:
+      summary: updatePatient
+      operationId: updatePatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePatientRequest'
+      description: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePatientResponse'
+    delete:
+      summary: deletePatient
+      operationId: deletePatient
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePatientResponse'
+      parameters:
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: patientId
+    parameters: []
+    put:
+      summary: registerPatient
+      operationId: registerPatient
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterPatientResponse'
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPatientRequest'
+  /visit:
+    get:
+      summary: retrieveVisit
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveVisitResponse'
+      operationId: retrieveVisit
+      parameters:
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: visitId
+    post:
+      summary: updateVisit
+      operationId: updateVisit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateVisitResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVisitRequest'
+    delete:
+      summary: cancelVisit
+      operationId: cancelVisit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteVisitResponse'
+      parameters:
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: visitId
+    put:
+      summary: registerVisit
+      operationId: registerVisit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterVisitResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterVisitRequest'
+components:
+  schemas:
+    RegisterPatientRequest:
+      title: RegisterPatientRequest
+      x-stoplight:
+        id: 362rs44iwsav9
+      type: object
+      properties:
+        patientData:
+          $ref: '#/components/schemas/Patient'
+    RegisterPatientResponse:
+      title: RegisterPatientResponse
+      x-stoplight:
+        id: fc2obi9w5pi57
+      type: object
+      properties:
+        patientData:
+          $ref: '#/components/schemas/PatientResponse'
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    UpdatePatientRequest:
+      title: UpdatePatientRequest
+      type: object
+      x-stoplight:
+        id: c8892d688a0ef
+      properties:
+        patientId:
+          type: integer
+          format: int64
+        patientData:
+          $ref: '#/components/schemas/Patient'
+    UpdatePatientResponse:
+      title: UpdatePatientResponse
+      x-stoplight:
+        id: rjenw8u0rfuao
+      type: object
+      properties:
+        patientData:
+          $ref: '#/components/schemas/PatientResponse'
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    RetrievePatientResponse:
+      title: RetrievePatientResponse
+      x-stoplight:
+        id: x7u52np01thxp
+      type: object
+      properties:
+        patientData:
+          $ref: '#/components/schemas/PatientResponse'
+        visits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Visit'
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    DeletePatientResponse:
+      title: DeletePatientResponse
+      x-stoplight:
+        id: 6cdy0fncsyxzb
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    Patient:
+      title: Patient
+      x-stoplight:
+        id: d1db747895ddd
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        ssn:
+          type: string
+    PatientResponse:
+      title: PatientResponse
+      x-stoplight:
+        id: 175n3bzu6mha0
+      type: object
+      properties:
+        patient:
+          $ref: '#/components/schemas/Patient'
+        patientId:
+          type: integer
+          format: int64
+    CommonResultResponse:
+      title: CommonResultResponse
+      x-stoplight:
+        id: wfmuplzi0x503
+      type: object
+      properties:
+        X-Request-ID:
+          type: string
+        code:
+          type: string
+        result:
+          type: boolean
+        message:
+          type: string
+    Visit:
+      title: Visit
+      x-stoplight:
+        id: 3bsu1k9n6v8me
+      type: object
+      properties:
+        appointment:
+          type: string
+        type:
+          type: string
+          enum:
+            - HOME
+            - OFFICE
+        reason:
+          type: string
+          enum:
+            - FIRST
+            - RECURRING
+            - URGENT
+        history:
+          type: string
+    RegisterVisitRequest:
+      title: RegisterVisitRequest
+      x-stoplight:
+        id: c8wc7q5ffbzuj
+      type: object
+      properties:
+        visitData:
+          $ref: '#/components/schemas/Visit'
+    RegisterVisitResponse:
+      title: RegisterVisitResponse
+      x-stoplight:
+        id: 4ozjwtt5f207j
+      type: object
+      properties:
+        visitData:
+          $ref: '#/components/schemas/VisitResponse'
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    UpdateVisitRequest:
+      title: UpdateVisitRequest
+      x-stoplight:
+        id: ocbqo297y6qmn
+      type: object
+      properties:
+        visitId:
+          type: integer
+          format: int64
+        visitData:
+          $ref: '#/components/schemas/Visit'
+    UpdateVisitResponse:
+      title: UpdateVisitResponse
+      x-stoplight:
+        id: y9deypz01xgjq
+      type: object
+      properties:
+        visitData:
+          $ref: '#/components/schemas/VisitResponse'
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    RetrieveVisitResponse:
+      title: RetrieveVisitResponse
+      x-stoplight:
+        id: l313ieqyntxf8
+      type: object
+      properties:
+        visitData:
+          $ref: '#/components/schemas/VisitResponse'
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    DeleteVisitResponse:
+      title: DeleteVisitResponse
+      x-stoplight:
+        id: 7exf8x45h2nbh
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/CommonResultResponse'
+    VisitResponse:
+      title: VisitResponse
+      x-stoplight:
+        id: onj03e7z4caxm
+      type: object
+      properties:
+        visitId:
+          type: integer
+          format: int64
+        visit:
+          $ref: '#/components/schemas/VisitResponse'
