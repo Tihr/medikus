@@ -1,40 +1,47 @@
 package medikus.rs.api;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import medikus.rs.model.CommonResultResponse;
+import medikus.bl.error.HandleError;
+import medikus.bl.error.ProjectException;
+import medikus.bl.service.PatientService;
 import medikus.rs.model.DeletePatientResponse;
 import medikus.rs.model.RegisterPatientRequest;
 import medikus.rs.model.RegisterPatientResponse;
 import medikus.rs.model.RetrievePatientResponse;
 import medikus.rs.model.UpdatePatientRequest;
 import medikus.rs.model.UpdatePatientResponse;
-
+@ApplicationScoped
+@HandleError
 public class PatientApiController implements PatientApi {
 
+	@Inject
+	PatientService patientService;
+	@Inject
+	EntityManager em;
+	
+	
 	@Override
 	public DeletePatientResponse deletePatient(Long patientId) {
-		// TODO Auto-generated method stub
+		// TODO AuOsto-generated method stub
 		return null;
 	}
 
 	@Override
+	@Transactional
 	public RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest) {
 		// TODO Auto-generated method stub
-		return null;
+		return patientService.registerPatient(registerPatientRequest);
 	}
 
 	@Override
-	public RetrievePatientResponse retrievePatient(String ssn) {
-		// TODO Auto-generated method stub
-		RetrievePatientResponse response = new RetrievePatientResponse();
-		CommonResultResponse result = new CommonResultResponse();
-		result.setCode("0000");
-		result.setMessage("SUCCESS");
-		result.setResult(true);
-		result.setxRequestID("aoooaaoaooaoao");
-		response.setResult(result);
-		return response;
+	public RetrievePatientResponse retrievePatient(String ssn) throws ProjectException {
+
+		return patientService.retrievePatient(ssn);
 	}
 
 	@Override
