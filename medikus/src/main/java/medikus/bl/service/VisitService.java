@@ -40,7 +40,6 @@ public class VisitService {
 		patient.setName(patientEntity.getFname());
 		patient.setSurname(patientEntity.getLname());
 		patient.setSsn(patientEntity.getSsn());
-
 		VisitEntity visitEntity = new VisitEntity();
 		visitEntity
 				.setAppointment(Timestamp.valueOf(registerVisitRequest.getVisitData().getAppointment().atStartOfDay()));
@@ -68,9 +67,13 @@ public class VisitService {
 		return deleteVisitResponse;
 	}
 
-	public RetrieveVisitResponse retrieveVisit(String ssn, Long visitId) {
+	public RetrieveVisitResponse retrieveVisit(String ssn, Long visitId) throws ProjectException {
 		RetrieveVisitResponse response = new RetrieveVisitResponse();
 		VisitEntity visitEntity = em.find(VisitEntity.class, visitId);
+		if (visitEntity == null)
+			throw new ProjectException(ProjectConstants.RestConstants.Result.NOT_FOUND_RECORD, null);
+		else if (!visitEntity.getPatientBean().getSsn().equals(ssn))
+			throw new ProjectException(ProjectConstants.RestConstants.Result.FORBIDDEN_OPERATION, null);
 		Visit visit = new Visit();
 		visit.setAppointment(visitEntity.getAppointment().toLocalDateTime().toLocalDate());
 		visit.setHistory(visitEntity.getHistory());
@@ -83,9 +86,13 @@ public class VisitService {
 		return response;
 	}
 
-	public UpdateVisitResponse updateVisit(String ssn, @Valid UpdateVisitRequest updateVisitRequest) {
+	public UpdateVisitResponse updateVisit(String ssn, @Valid UpdateVisitRequest updateVisitRequest) throws ProjectException {
 		UpdateVisitResponse response = new UpdateVisitResponse();
 		VisitEntity visitEntity = em.find(VisitEntity.class, updateVisitRequest.getVisitId());
+		if (visitEntity == null)
+			throw new ProjectException(ProjectConstants.RestConstants.Result.NOT_FOUND_RECORD, null);
+		else if (!visitEntity.getPatientBean().getSsn().equals(ssn))
+			throw new ProjectException(ProjectConstants.RestConstants.Result.FORBIDDEN_OPERATION, null);
 		visitEntity
 				.setAppointment(Timestamp.valueOf(updateVisitRequest.getVisitData().getAppointment().atStartOfDay()));
 		visitEntity.setHistory(updateVisitRequest.getVisitData().getHistory());
