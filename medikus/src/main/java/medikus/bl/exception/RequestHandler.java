@@ -36,6 +36,7 @@ public class RequestHandler {
 				context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class)
 						.invoke(response, RestBuilder.buildCommonResultResponseFromConstant(
 								ProjectConstants.RestConstants.Result.DUPLICATE_RECORD));
+				return response;
 			}
 			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class)
 					.invoke(response, RestBuilder.buildCommonResultResponseFromConstant(
