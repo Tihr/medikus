@@ -12,16 +12,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.validation.Valid;
 
-import medikus.bl.error.ProjectException;
+import medikus.bl.exception.ProjectException;
 import medikus.db.model.PatientEntity;
-import medikus.rs.model.CommonResultResponse;
+import medikus.db.model.VisitEntity;
 import medikus.rs.model.Patient;
 import medikus.rs.model.PatientResponse;
 import medikus.rs.model.RegisterPatientRequest;
 import medikus.rs.model.RegisterPatientResponse;
 import medikus.rs.model.RetrievePatientResponse;
+import medikus.rs.model.Visit;
+import medikus.rs.model.Visit.ReasonEnum;
+import medikus.rs.model.Visit.TypeEnum;
+import medikus.rs.model.VisitResponse;
 import medikus.util.ProjectConstants;
-import medikus.util.RestBuilder;
 
 @ApplicationScoped
 public class PatientService {
@@ -29,55 +32,69 @@ public class PatientService {
 	@Inject
 	EntityManager em;
 
-	public RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest) {
-		PatientEntity patientEntity = new PatientEntity();
-		patientEntity.setBirthdate(Date
-				.from(registerPatientRequest.getPatientData().getBirthdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
-		patientEntity.setFname(registerPatientRequest.getPatientData().getName());
-		patientEntity.setLname(registerPatientRequest.getPatientData().getSurname());
-		patientEntity.setSsn(registerPatientRequest.getPatientData().getSsn());
-		em.persist(patientEntity);
-		em.flush();
-		Patient patient = new Patient();
-		patient.setName(patientEntity.getFname());
-		patient.setSurname(patientEntity.getLname());
-		patient.setSsn(patientEntity.getSsn());
-		patient.setBirthdate(LocalDate.from(registerPatientRequest.getPatientData().getBirthdate()));
+	public RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest)
+			throws ProjectException {
 		PatientResponse patientResponse = new PatientResponse();
-		patientResponse.setPatient(patient);
-		patientResponse.setPatientId(patientEntity.getId());
-		CommonResultResponse result = RestBuilder.buildCommonResultResponseOK();
+		PatientEntity patientEntity = new PatientEntity();
+
+		try {
+			patientEntity.setBirthdate(Date.from(
+					registerPatientRequest.getPatientData().getBirthdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
+			patientEntity.setFname(registerPatientRequest.getPatientData().getName());
+			patientEntity.setLname(registerPatientRequest.getPatientData().getSurname());
+			patientEntity.setSsn(registerPatientRequest.getPatientData().getSsn());
+			patientResponse.setPatient(registerPatientRequest.getPatientData());
+			em.persist(patientEntity);
+			em.flush();
+		} catch (javax.persistence.PersistenceException jpe) {
+			if (jpe.getCause() instanceof org.hibernate.exception.ConstraintViolationException)
+				throw new ProjectException(ProjectConstants.RestConstants.Result.DUPLICATE_RECORD, jpe.getCause());
+			throw new ProjectException(ProjectConstants.RestConstants.Result.INTERNAL_ERROR, jpe.getCause());
+		}
+
 		RegisterPatientResponse response = new RegisterPatientResponse();
 		response.setPatientData(patientResponse);
-		response.setResult(result);
+		patientResponse.setPatientId(patientEntity.getId());
 		return response;
 	}
 
 	public RetrievePatientResponse retrievePatient(String ssn) throws ProjectException {
 		RetrievePatientResponse response = new RetrievePatientResponse();
 		try {
-			Query patientQuery = em.createNativeQuery("select * from patient where ssn=:ssn", PatientEntity.class);
+			Query patientQuery = em.createNativeQuery(
+					"select * from patient p left outer join visit v ON p.id=v.patient where ssn=:ssn",
+					PatientEntity.class);
 			patientQuery.setParameter("ssn", ssn);
 			PatientEntity patientEntity = (PatientEntity) patientQuery.getSingleResult();
 			Patient patient = new Patient();
 			patient.setName(patientEntity.getFname());
 			patient.setSurname(patientEntity.getLname());
 			patient.setSsn(patientEntity.getSsn());
-
 			LocalDate.ofInstant(Instant.ofEpochMilli(patientEntity.getBirthdate().getTime()), ZoneId.systemDefault());
-			patient.setBirthdate(LocalDate.ofInstant(Instant.ofEpochMilli(patientEntity.getBirthdate().getTime()), ZoneId.systemDefault()));
-		
+			patient.setBirthdate(LocalDate.ofInstant(Instant.ofEpochMilli(patientEntity.getBirthdate().getTime()),
+					ZoneId.systemDefault()));
+
 			PatientResponse patientResponse = new PatientResponse();
 			patientResponse.setPatient(patient);
 			patientResponse.setPatientId(patientEntity.getId());
+
+			for (VisitEntity visitEntity : patientEntity.getVisits()) {
+				Visit visit = new Visit();
+				visit.setAppointment(visitEntity.getAppointment().toLocalDateTime().toLocalDate());
+				visit.setHistory(visitEntity.getHistory());
+				visit.setReason(ReasonEnum.valueOf(visitEntity.getReason()));
+				visit.setType(TypeEnum.valueOf(visitEntity.getType()));
+				VisitResponse visitResponse = new VisitResponse();
+				visitResponse.setVisit(visit);
+				visitResponse.setVisitId(visitEntity.getId());
+				response.getVisits().add(visitResponse);
+			}
+
 			response.setPatientData(patientResponse);
 		} catch (javax.persistence.NoResultException nre) {
 			throw new ProjectException(ProjectConstants.RestConstants.Result.NOT_FOUND_RECORD, nre);
-		} catch (Exception e) {
-			throw new ProjectException(ProjectConstants.RestConstants.Result.GENERIC_ERROR, e);
 		}
-		CommonResultResponse result = RestBuilder.buildCommonResultResponseOK();
-		response.setResult(result);
+
 		return response;
 	}
 }

@@ -155,7 +155,7 @@
                 <configuration>
                   <inputSpec>${project.basedir}/src/main/resources/swagger/Medikus.yaml</inputSpec>
                   <generatorName>jaxrs-spec</generatorName>
-                  <additionalProperties>interfaceOnly=false,useSwaggerAnnotations=true</additionalProperties>
+                  <additionalProperties>interfaceOnly=true,useSwaggerAnnotations=false</additionalProperties>
                   <configOptions>
                     <sourceFolder>src/gen/java/main</sourceFolder>
                   </configOptions>

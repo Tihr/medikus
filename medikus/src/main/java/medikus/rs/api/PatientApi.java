@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import medikus.bl.error.ProjectException;
+import medikus.bl.exception.ProjectException;
 import medikus.rs.model.DeletePatientResponse;
 import medikus.rs.model.RegisterPatientRequest;
 import medikus.rs.model.RegisterPatientResponse;
@@ -28,7 +28,7 @@ import medikus.rs.model.UpdatePatientResponse;
     @PUT
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest);
+    RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest) throws ProjectException;
 
     @GET
     @Produces({ "application/json" })

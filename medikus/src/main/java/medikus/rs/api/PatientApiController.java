@@ -6,8 +6,8 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import medikus.bl.error.HandleError;
-import medikus.bl.error.ProjectException;
+import medikus.bl.exception.HandleRequest;
+import medikus.bl.exception.ProjectException;
 import medikus.bl.service.PatientService;
 import medikus.rs.model.DeletePatientResponse;
 import medikus.rs.model.RegisterPatientRequest;
@@ -16,13 +16,12 @@ import medikus.rs.model.RetrievePatientResponse;
 import medikus.rs.model.UpdatePatientRequest;
 import medikus.rs.model.UpdatePatientResponse;
 @ApplicationScoped
-@HandleError
+@HandleRequest
 public class PatientApiController implements PatientApi {
 
 	@Inject
 	PatientService patientService;
-	@Inject
-	EntityManager em;
+
 	
 	
 	@Override
@@ -33,7 +32,7 @@ public class PatientApiController implements PatientApi {
 
 	@Override
 	@Transactional
-	public RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest) {
+	public RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest) throws ProjectException {
 		// TODO Auto-generated method stub
 		return patientService.registerPatient(registerPatientRequest);
 	}

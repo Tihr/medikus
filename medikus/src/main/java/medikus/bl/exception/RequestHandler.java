@@ -1,4 +1,4 @@
-package medikus.bl.error;
+package medikus.bl.exception;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -8,13 +8,13 @@ import io.quarkus.arc.Priority;
 import medikus.rs.model.CommonResultResponse;
 import medikus.util.RestBuilder;
 
-@HandleError
+@HandleRequest
 @Priority(1)
 @Interceptor
-public class ErrorHandler {
+public class RequestHandler {
 
 	@AroundInvoke
-	Object onError(InvocationContext context) throws Exception {
+	Object handle(InvocationContext context) throws Exception {
 		Object ret = null;
 		try {
 			ret = context.proceed();
@@ -28,6 +28,8 @@ public class ErrorHandler {
 			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class).invoke(response, RestBuilder.buildCommonResultResponseGenericError());
 			return response;
 		}
+		
+		context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class).invoke(ret, RestBuilder.buildCommonResultResponseOK());
 		return ret;
 	}
 }

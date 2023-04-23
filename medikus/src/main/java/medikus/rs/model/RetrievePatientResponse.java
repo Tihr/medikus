@@ -10,10 +10,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-18T13:48:10.318236100+02:00[Europe/Rome]")public class RetrievePatientResponse   {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-21T16:53:15.643081200+02:00[Europe/Rome]")public class RetrievePatientResponse   {
   
   private @Valid PatientResponse patientData;
-  private @Valid List<Visit> visits = new ArrayList<Visit>();
+  private @Valid List<VisitResponse> visits = new ArrayList<VisitResponse>();
   private @Valid CommonResultResponse result;
 
   /**
@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     this.patientData = patientData;
   }/**
    **/
-  public RetrievePatientResponse visits(List<Visit> visits) {
+  public RetrievePatientResponse visits(List<VisitResponse> visits) {
     this.visits = visits;
     return this;
   }
@@ -44,11 +44,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("visits")
-  public List<Visit> getVisits() {
+  public List<VisitResponse> getVisits() {
     return visits;
   }
 
-  public void setVisits(List<Visit> visits) {
+  public void setVisits(List<VisitResponse> visits) {
     this.visits = visits;
   }/**
    **/

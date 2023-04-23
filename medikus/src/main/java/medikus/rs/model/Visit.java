@@ -1,5 +1,6 @@
 package medikus.rs.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -10,9 +11,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-18T13:48:10.318236100+02:00[Europe/Rome]")public class Visit   {
+
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-21T15:47:03.283248100+02:00[Europe/Rome]")public class Visit   {
   
-  private @Valid String appointment;
+  private @Valid LocalDate appointment;
 
 public enum TypeEnum {
 
@@ -85,7 +87,7 @@ public enum ReasonEnum {
 
   /**
    **/
-  public Visit appointment(String appointment) {
+  public Visit appointment(LocalDate appointment) {
     this.appointment = appointment;
     return this;
   }
@@ -94,11 +96,11 @@ public enum ReasonEnum {
 
   
   @JsonProperty("appointment")
-  public String getAppointment() {
+  public LocalDate getAppointment() {
     return appointment;
   }
 
-  public void setAppointment(String appointment) {
+  public void setAppointment(LocalDate appointment) {
     this.appointment = appointment;
   }/**
    **/
@@ -143,7 +145,6 @@ public enum ReasonEnum {
 
   
 
-  
   @JsonProperty("history")
   public String getHistory() {
     return history;

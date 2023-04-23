@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-18T13:48:10.318236100+02:00[Europe/Rome]")public class VisitResponse   {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-21T16:52:32.710006+02:00[Europe/Rome]")public class VisitResponse   {
   
   private @Valid Long visitId;
-  private @Valid VisitResponse visit;
+  private @Valid Visit visit;
 
   /**
    **/
@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     this.visitId = visitId;
   }/**
    **/
-  public VisitResponse visit(VisitResponse visit) {
+  public VisitResponse visit(Visit visit) {
     this.visit = visit;
     return this;
   }
@@ -41,11 +41,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("visit")
-  public VisitResponse getVisit() {
+  public Visit getVisit() {
     return visit;
   }
 
-  public void setVisit(VisitResponse visit) {
+  public void setVisit(Visit visit) {
     this.visit = visit;
   }
 

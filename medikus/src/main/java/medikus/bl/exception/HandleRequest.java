@@ -1,4 +1,4 @@
-package medikus.bl.error;
+package medikus.bl.exception;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -12,6 +12,6 @@ import javax.interceptor.InterceptorBinding;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD}) 
 @Inherited 
-public @interface HandleError {
+public @interface HandleRequest {
 
 }

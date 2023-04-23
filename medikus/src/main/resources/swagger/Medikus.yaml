@@ -74,7 +74,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegisterPatientRequest'
-  /visit:
+  '/visit/{ssn}':
     get:
       summary: retrieveVisit
       tags: []
@@ -138,6 +138,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegisterVisitRequest'
+    parameters:
+      - schema:
+          type: string
+        name: ssn
+        in: path
+        required: true
 components:
   schemas:
     RegisterPatientRequest:
@@ -190,7 +196,7 @@ components:
         visits:
           type: array
           items:
-            $ref: '#/components/schemas/Visit'
+            $ref: '#/components/schemas/VisitResponse'
         result:
           $ref: '#/components/schemas/CommonResultResponse'
     DeletePatientResponse:
@@ -249,6 +255,7 @@ components:
       properties:
         appointment:
           type: string
+          format: date
         type:
           type: string
           enum:
@@ -329,4 +336,4 @@ components:
           type: integer
           format: int64
         visit:
-          $ref: '#/components/schemas/VisitResponse'
+          $ref: '#/components/schemas/Visit'

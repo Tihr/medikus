@@ -8,8 +8,8 @@ public class ProjectConstants {
 		
 		public static enum Result{
 			OK("0000","SUCCESS"),
-			NOT_FOUND_RECORD("0404","Record not found."),
-			GENERIC_ERROR("1000","Generic error.");
+			NOT_FOUND_RECORD("1404","Record not found."),
+			GENERIC_ERROR("1000","Generic error."), DUPLICATE_RECORD("1200","Record already present."),  INTERNAL_ERROR("1500","Internal error.");
 
 			private String code;
 			private String message;

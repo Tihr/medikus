@@ -1,6 +1,6 @@
 package medikus.util;
 
-import medikus.bl.error.ProjectException;
+import medikus.bl.exception.ProjectException;
 import medikus.rs.model.CommonResultResponse;
 
 public class RestBuilder {

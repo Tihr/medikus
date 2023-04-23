@@ -1,4 +1,4 @@
-package medikus.bl.error;
+package medikus.bl.exception;
 
 import org.jboss.logging.Logger;
 
