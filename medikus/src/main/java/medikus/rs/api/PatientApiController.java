@@ -25,6 +25,7 @@ public class PatientApiController implements PatientApi {
 	
 	
 	@Override
+	@Transactional
 	public DeletePatientResponse deletePatient(Long patientId) {
 		// TODO AuOsto-generated method stub
 		return null;
@@ -38,12 +39,14 @@ public class PatientApiController implements PatientApi {
 	}
 
 	@Override
+	@Transactional
 	public RetrievePatientResponse retrievePatient(String ssn) throws ProjectException {
 
 		return patientService.retrievePatient(ssn);
 	}
 
 	@Override
+	@Transactional
 	public UpdatePatientResponse updatePatient(@Valid UpdatePatientRequest updatePatientRequest) {
 		// TODO Auto-generated method stub
 		return null;

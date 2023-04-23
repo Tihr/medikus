@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import medikus.bl.exception.ProjectException;
 import medikus.rs.model.DeleteVisitResponse;
 import medikus.rs.model.RegisterVisitRequest;
 import medikus.rs.model.RegisterVisitResponse;
@@ -24,19 +25,19 @@ import medikus.rs.model.UpdateVisitResponse;
 
     @DELETE
     @Produces({ "application/json" })
-    DeleteVisitResponse cancelVisit(@PathParam("ssn") String ssn,@QueryParam("visitId")    Long visitId);
+    DeleteVisitResponse cancelVisit(@PathParam("ssn") String ssn,@QueryParam("visitId")    Long visitId) throws ProjectException;
 
     @PUT
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    RegisterVisitResponse registerVisit(@PathParam("ssn") String ssn,@Valid RegisterVisitRequest registerVisitRequest);
+    RegisterVisitResponse registerVisit(@PathParam("ssn") String ssn,@Valid RegisterVisitRequest registerVisitRequest) throws ProjectException;
 
     @GET
     @Produces({ "application/json" })
-    RetrieveVisitResponse retrieveVisit(@PathParam("ssn") String ssn,@QueryParam("visitId")    Long visitId);
+    RetrieveVisitResponse retrieveVisit(@PathParam("ssn") String ssn,@QueryParam("visitId")    Long visitId) throws ProjectException;
 
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    UpdateVisitResponse updateVisit(@PathParam("ssn") String ssn,@Valid UpdateVisitRequest updateVisitRequest);
+    UpdateVisitResponse updateVisit(@PathParam("ssn") String ssn,@Valid UpdateVisitRequest updateVisitRequest) throws ProjectException;
 }

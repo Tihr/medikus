@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import medikus.bl.exception.HandleRequest;
+import medikus.bl.exception.ProjectException;
 import medikus.bl.service.VisitService;
 import medikus.rs.model.DeleteVisitResponse;
 import medikus.rs.model.RegisterVisitRequest;
@@ -14,39 +15,39 @@ import medikus.rs.model.RegisterVisitResponse;
 import medikus.rs.model.RetrieveVisitResponse;
 import medikus.rs.model.UpdateVisitRequest;
 import medikus.rs.model.UpdateVisitResponse;
+
 @ApplicationScoped
 @HandleRequest
 public class VisitApiController implements VisitApi {
 
 	@Inject
 	VisitService visitService;
-	
-	@Inject
-	EntityManager em;
-	
-	
-
+	@Transactional
 	@Override
-	public DeleteVisitResponse cancelVisit(String ssn, Long visitId) {
+	public DeleteVisitResponse cancelVisit(String ssn, Long visitId) throws ProjectException {
 		// TODO Auto-generated method stub
-		return null;
+		return visitService.cancelVisit(ssn, visitId);
+	}
+
+	@Transactional
+	@Override
+	public RegisterVisitResponse registerVisit(String ssn, @Valid RegisterVisitRequest registerVisitRequest)
+			throws ProjectException {
+		return visitService.registerVisit(ssn, registerVisitRequest);
+
 	}
 	@Transactional
 	@Override
-	public RegisterVisitResponse registerVisit(String ssn, @Valid RegisterVisitRequest registerVisitRequest) {
-		return visitService.registerVisit(ssn,registerVisitRequest);
+	public RetrieveVisitResponse retrieveVisit(String ssn, Long visitId) throws ProjectException {
+		// TODO Auto-generated method stub
+		return visitService.retrieveVisit(ssn, visitId);
+	}
+	@Transactional
+	@Override
+	public UpdateVisitResponse updateVisit(String ssn, @Valid UpdateVisitRequest updateVisitRequest)
+			throws ProjectException {
+		// TODO Auto-generated method stub
+		return visitService.updateVisit(ssn, updateVisitRequest);
+	}
 
-	}
-	@Override
-	public RetrieveVisitResponse retrieveVisit(String ssn, Long visitId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public UpdateVisitResponse updateVisit(String ssn, @Valid UpdateVisitRequest updateVisitRequest) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 }

@@ -6,6 +6,7 @@ import javax.interceptor.InvocationContext;
 
 import io.quarkus.arc.Priority;
 import medikus.rs.model.CommonResultResponse;
+import medikus.util.ProjectConstants;
 import medikus.util.RestBuilder;
 
 @HandleRequest
@@ -20,16 +21,36 @@ public class RequestHandler {
 			ret = context.proceed();
 		} catch (ProjectException pe) {
 			Object response = context.getMethod().getReturnType().getDeclaredConstructor().newInstance();
-			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class).invoke(response, RestBuilder.buildCommonResultFromProjectException(pe));
+			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class)
+					.invoke(response, RestBuilder.buildCommonResultFromProjectException(pe));
 			return response;
-		} catch (Exception e)
-		{
+		} catch (javax.persistence.NoResultException nre) {
 			Object response = context.getMethod().getReturnType().getDeclaredConstructor().newInstance();
-			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class).invoke(response, RestBuilder.buildCommonResultResponseGenericError());
+			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class)
+					.invoke(response, RestBuilder.buildCommonResultResponseFromConstant(
+							ProjectConstants.RestConstants.Result.NOT_FOUND_RECORD));
+			return response;
+		} catch (javax.persistence.PersistenceException jpe) {
+			Object response = context.getMethod().getReturnType().getDeclaredConstructor().newInstance();
+			if (jpe.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
+				context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class)
+						.invoke(response, RestBuilder.buildCommonResultResponseFromConstant(
+								ProjectConstants.RestConstants.Result.DUPLICATE_RECORD));
+			}
+			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class)
+					.invoke(response, RestBuilder.buildCommonResultResponseFromConstant(
+							ProjectConstants.RestConstants.Result.INTERNAL_ERROR));
+			return response;
+		} catch (Exception e) {
+			Object response = context.getMethod().getReturnType().getDeclaredConstructor().newInstance();
+			context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class)
+					.invoke(response, RestBuilder.buildCommonResultResponseGenericError());
 			return response;
 		}
-		
-		context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class).invoke(ret, RestBuilder.buildCommonResultResponseOK());
+
+		context.getMethod().getReturnType().getDeclaredMethod("setResult", CommonResultResponse.class).invoke(ret,
+				RestBuilder.buildCommonResultResponseOK());
 		return ret;
 	}
+
 }

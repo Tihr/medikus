@@ -12,11 +12,6 @@ public class RestBuilder {
 
 	}
 
-	public static CommonResultResponse buildCommonResultResponseNotFound() {
-
-		return buildCommonResultResponse(ProjectConstants.RestConstants.Result.NOT_FOUND_RECORD.getCode(),
-				ProjectConstants.RestConstants.Result.NOT_FOUND_RECORD.getMessage(), true);
-	}
 
 	public static CommonResultResponse buildCommonResultFromProjectException(ProjectException pe) {
 		return buildCommonResultResponse(pe.getResult().getCode(), pe.getResult().getMessage(), false);
@@ -25,7 +20,9 @@ public class RestBuilder {
 	public static CommonResultResponse buildCommonResultResponseGenericError() {
 		return buildCommonResultResponse(ProjectConstants.RestConstants.Result.GENERIC_ERROR.getCode(), ProjectConstants.RestConstants.Result.GENERIC_ERROR.getMessage(), false);
 	}
-
+	public static CommonResultResponse buildCommonResultResponseFromConstant(ProjectConstants.RestConstants.Result result) {
+		return buildCommonResultResponse(result.getCode(), result.getMessage(), false);
+	}
 	public static CommonResultResponse buildCommonResultResponse(String code, String message, boolean success) {
 		CommonResultResponse result = new CommonResultResponse();
 		result.setCode(code);

@@ -37,20 +37,14 @@ public class PatientService {
 		PatientResponse patientResponse = new PatientResponse();
 		PatientEntity patientEntity = new PatientEntity();
 
-		try {
-			patientEntity.setBirthdate(Date.from(
-					registerPatientRequest.getPatientData().getBirthdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
-			patientEntity.setFname(registerPatientRequest.getPatientData().getName());
-			patientEntity.setLname(registerPatientRequest.getPatientData().getSurname());
-			patientEntity.setSsn(registerPatientRequest.getPatientData().getSsn());
-			patientResponse.setPatient(registerPatientRequest.getPatientData());
-			em.persist(patientEntity);
-			em.flush();
-		} catch (javax.persistence.PersistenceException jpe) {
-			if (jpe.getCause() instanceof org.hibernate.exception.ConstraintViolationException)
-				throw new ProjectException(ProjectConstants.RestConstants.Result.DUPLICATE_RECORD, jpe.getCause());
-			throw new ProjectException(ProjectConstants.RestConstants.Result.INTERNAL_ERROR, jpe.getCause());
-		}
+		patientEntity.setBirthdate(Date
+				.from(registerPatientRequest.getPatientData().getBirthdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
+		patientEntity.setFname(registerPatientRequest.getPatientData().getName());
+		patientEntity.setLname(registerPatientRequest.getPatientData().getSurname());
+		patientEntity.setSsn(registerPatientRequest.getPatientData().getSsn());
+		patientResponse.setPatient(registerPatientRequest.getPatientData());
+		em.persist(patientEntity);
+		em.flush();
 
 		RegisterPatientResponse response = new RegisterPatientResponse();
 		response.setPatientData(patientResponse);
@@ -60,40 +54,37 @@ public class PatientService {
 
 	public RetrievePatientResponse retrievePatient(String ssn) throws ProjectException {
 		RetrievePatientResponse response = new RetrievePatientResponse();
-		try {
-			Query patientQuery = em.createNativeQuery(
-					"select * from patient p left outer join visit v ON p.id=v.patient where ssn=:ssn",
-					PatientEntity.class);
-			patientQuery.setParameter("ssn", ssn);
-			PatientEntity patientEntity = (PatientEntity) patientQuery.getSingleResult();
-			Patient patient = new Patient();
-			patient.setName(patientEntity.getFname());
-			patient.setSurname(patientEntity.getLname());
-			patient.setSsn(patientEntity.getSsn());
-			LocalDate.ofInstant(Instant.ofEpochMilli(patientEntity.getBirthdate().getTime()), ZoneId.systemDefault());
-			patient.setBirthdate(LocalDate.ofInstant(Instant.ofEpochMilli(patientEntity.getBirthdate().getTime()),
-					ZoneId.systemDefault()));
 
-			PatientResponse patientResponse = new PatientResponse();
-			patientResponse.setPatient(patient);
-			patientResponse.setPatientId(patientEntity.getId());
+		Query patientQuery = em.createNativeQuery(
+				"select * from patient p left outer join visit v ON p.id=v.patient where ssn=:ssn",
+				PatientEntity.class);
+		patientQuery.setParameter("ssn", ssn);
+		PatientEntity patientEntity = (PatientEntity) patientQuery.getSingleResult();
+		Patient patient = new Patient();
+		patient.setName(patientEntity.getFname());
+		patient.setSurname(patientEntity.getLname());
+		patient.setSsn(patientEntity.getSsn());
+		LocalDate.ofInstant(Instant.ofEpochMilli(patientEntity.getBirthdate().getTime()), ZoneId.systemDefault());
+		patient.setBirthdate(LocalDate.ofInstant(Instant.ofEpochMilli(patientEntity.getBirthdate().getTime()),
+				ZoneId.systemDefault()));
 
-			for (VisitEntity visitEntity : patientEntity.getVisits()) {
-				Visit visit = new Visit();
-				visit.setAppointment(visitEntity.getAppointment().toLocalDateTime().toLocalDate());
-				visit.setHistory(visitEntity.getHistory());
-				visit.setReason(ReasonEnum.valueOf(visitEntity.getReason()));
-				visit.setType(TypeEnum.valueOf(visitEntity.getType()));
-				VisitResponse visitResponse = new VisitResponse();
-				visitResponse.setVisit(visit);
-				visitResponse.setVisitId(visitEntity.getId());
-				response.getVisits().add(visitResponse);
-			}
+		PatientResponse patientResponse = new PatientResponse();
+		patientResponse.setPatient(patient);
+		patientResponse.setPatientId(patientEntity.getId());
 
-			response.setPatientData(patientResponse);
-		} catch (javax.persistence.NoResultException nre) {
-			throw new ProjectException(ProjectConstants.RestConstants.Result.NOT_FOUND_RECORD, nre);
+		for (VisitEntity visitEntity : patientEntity.getVisits()) {
+			Visit visit = new Visit();
+			visit.setAppointment(visitEntity.getAppointment().toLocalDateTime().toLocalDate());
+			visit.setHistory(visitEntity.getHistory());
+			visit.setReason(ReasonEnum.valueOf(visitEntity.getReason()));
+			visit.setType(TypeEnum.valueOf(visitEntity.getType()));
+			VisitResponse visitResponse = new VisitResponse();
+			visitResponse.setVisit(visit);
+			visitResponse.setVisitId(visitEntity.getId());
+			response.getVisits().add(visitResponse);
 		}
+
+		response.setPatientData(patientResponse);
 
 		return response;
 	}
