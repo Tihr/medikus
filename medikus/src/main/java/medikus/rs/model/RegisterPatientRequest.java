@@ -3,12 +3,13 @@ package medikus.rs.model;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-18T13:48:10.318236100+02:00[Europe/Rome]")public class RegisterPatientRequest   {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-23T09:58:40.755323600+02:00[Europe/Rome]")public class RegisterPatientRequest   {
   
   private @Valid Patient patientData;
 
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("patientData")
+  @NotNull
   public Patient getPatientData() {
     return patientData;
   }

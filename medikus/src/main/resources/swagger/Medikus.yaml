@@ -7,73 +7,6 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
-  /patient:
-    get:
-      summary: retrievePatient
-      tags: []
-      operationId: retrievePatient
-      parameters:
-        - schema:
-            type: string
-            format: int64
-          in: query
-          name: ssn
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RetrievePatientResponse'
-    post:
-      summary: updatePatient
-      operationId: updatePatient
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdatePatientRequest'
-      description: ''
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdatePatientResponse'
-    delete:
-      summary: deletePatient
-      operationId: deletePatient
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeletePatientResponse'
-      parameters:
-        - schema:
-            type: integer
-            format: int64
-          in: query
-          name: patientId
-    parameters: []
-    put:
-      summary: registerPatient
-      operationId: registerPatient
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RegisterPatientResponse'
-      description: ''
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterPatientRequest'
   '/visit/{ssn}':
     get:
       summary: retrieveVisit
@@ -144,6 +77,73 @@ paths:
         name: ssn
         in: path
         required: true
+  /patient:
+    get:
+      summary: retrievePatient
+      tags: []
+      operationId: retrievePatient
+      parameters:
+        - schema:
+            type: string
+            format: int64
+          in: query
+          name: ssn
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievePatientResponse'
+    post:
+      summary: updatePatient
+      operationId: updatePatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePatientRequest'
+      description: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePatientResponse'
+    delete:
+      summary: deletePatient
+      operationId: deletePatient
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePatientResponse'
+      parameters:
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: patientId
+    parameters: []
+    put:
+      summary: registerPatient
+      operationId: registerPatient
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterPatientResponse'
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPatientRequest'
 components:
   schemas:
     RegisterPatientRequest:
@@ -154,6 +154,8 @@ components:
       properties:
         patientData:
           $ref: '#/components/schemas/Patient'
+      required:
+        - patientData
     RegisterPatientResponse:
       title: RegisterPatientResponse
       x-stoplight:
@@ -175,6 +177,9 @@ components:
           format: int64
         patientData:
           $ref: '#/components/schemas/Patient'
+      required:
+        - patientId
+        - patientData
     UpdatePatientResponse:
       title: UpdatePatientResponse
       x-stoplight:
@@ -222,6 +227,11 @@ components:
           format: date
         ssn:
           type: string
+      required:
+        - name
+        - surname
+        - birthdate
+        - ssn
     PatientResponse:
       title: PatientResponse
       x-stoplight:
@@ -269,6 +279,10 @@ components:
             - URGENT
         history:
           type: string
+      required:
+        - appointment
+        - type
+        - reason
     RegisterVisitRequest:
       title: RegisterVisitRequest
       x-stoplight:
@@ -298,6 +312,9 @@ components:
           format: int64
         visitData:
           $ref: '#/components/schemas/Visit'
+      required:
+        - visitId
+        - visitData
     UpdateVisitResponse:
       title: UpdateVisitResponse
       x-stoplight:

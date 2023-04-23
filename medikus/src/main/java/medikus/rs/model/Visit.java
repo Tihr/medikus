@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,8 +12,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
-
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-21T15:47:03.283248100+02:00[Europe/Rome]")public class Visit   {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-23T09:58:40.755323600+02:00[Europe/Rome]")public class Visit   {
   
   private @Valid LocalDate appointment;
 
@@ -96,6 +96,7 @@ public enum ReasonEnum {
 
   
   @JsonProperty("appointment")
+  @NotNull
   public LocalDate getAppointment() {
     return appointment;
   }
@@ -113,6 +114,7 @@ public enum ReasonEnum {
 
   
   @JsonProperty("type")
+  @NotNull
   public TypeEnum getType() {
     return type;
   }
@@ -130,6 +132,7 @@ public enum ReasonEnum {
 
   
   @JsonProperty("reason")
+  @NotNull
   public ReasonEnum getReason() {
     return reason;
   }
@@ -145,6 +148,7 @@ public enum ReasonEnum {
 
   
 
+  
   @JsonProperty("history")
   public String getHistory() {
     return history;

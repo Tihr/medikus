@@ -3,12 +3,13 @@ package medikus.rs.model;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-18T13:48:10.318236100+02:00[Europe/Rome]")public class UpdateVisitRequest   {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-23T09:58:40.755323600+02:00[Europe/Rome]")public class UpdateVisitRequest   {
   
   private @Valid Long visitId;
   private @Valid Visit visitData;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("visitId")
+  @NotNull
   public Long getVisitId() {
     return visitId;
   }
@@ -41,6 +43,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("visitData")
+  @NotNull
   public Visit getVisitData() {
     return visitData;
   }

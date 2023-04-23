@@ -17,6 +17,10 @@ public class RestBuilder {
 		return buildCommonResultResponse(pe.getResult().getCode(), pe.getResult().getMessage(), false);
 	}
 
+	public static CommonResultResponse buildCommonResultFromException(ProjectConstants.RestConstants.Result result, Exception e)
+	{
+		return buildCommonResultResponse(result.getCode(),e.getMessage(), false);
+	}
 	public static CommonResultResponse buildCommonResultResponseGenericError() {
 		return buildCommonResultResponse(ProjectConstants.RestConstants.Result.GENERIC_ERROR.getCode(), ProjectConstants.RestConstants.Result.GENERIC_ERROR.getMessage(), false);
 	}

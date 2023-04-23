@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-21T16:53:15.643081200+02:00[Europe/Rome]")public class RetrievePatientResponse   {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-23T09:58:40.755323600+02:00[Europe/Rome]")public class RetrievePatientResponse   {
   
   private @Valid PatientResponse patientData;
   private @Valid List<VisitResponse> visits = new ArrayList<VisitResponse>();

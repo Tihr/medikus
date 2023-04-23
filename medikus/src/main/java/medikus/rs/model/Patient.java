@@ -4,12 +4,13 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-18T13:48:10.318236100+02:00[Europe/Rome]")public class Patient   {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2023-04-23T09:58:40.755323600+02:00[Europe/Rome]")public class Patient   {
   
   private @Valid String name;
   private @Valid String surname;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("name")
+  @NotNull
   public String getName() {
     return name;
   }
@@ -44,6 +46,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("surname")
+  @NotNull
   public String getSurname() {
     return surname;
   }
@@ -61,6 +64,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("birthdate")
+  @NotNull
   public LocalDate getBirthdate() {
     return birthdate;
   }
@@ -78,6 +82,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   
   @JsonProperty("ssn")
+  @NotNull
   public String getSsn() {
     return ssn;
   }

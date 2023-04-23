@@ -37,6 +37,11 @@ public class RequestHandler {
 			throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(RestBuilder
 					.buildCommonResultResponseFromConstant(ProjectConstants.RestConstants.Result.INTERNAL_ERROR))
 					.build());
+		} catch (io.quarkus.hibernate.validator.runtime.jaxrs.ResteasyReactiveViolationException rrve) {
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+					.entity(RestBuilder
+							.buildCommonResultFromException(ProjectConstants.RestConstants.Result.BAD_REQUEST, rrve))
+					.build());
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR)
 					.entity(RestBuilder.buildCommonResultResponseGenericError()).build());

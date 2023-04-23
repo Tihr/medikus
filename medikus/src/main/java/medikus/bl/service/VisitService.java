@@ -21,8 +21,8 @@ import medikus.rs.model.UpdateVisitResponse;
 import medikus.rs.model.Visit;
 import medikus.rs.model.Visit.ReasonEnum;
 import medikus.rs.model.Visit.TypeEnum;
-import medikus.util.ProjectConstants;
 import medikus.rs.model.VisitResponse;
+import medikus.util.ProjectConstants;
 
 @ApplicationScoped
 public class VisitService {
