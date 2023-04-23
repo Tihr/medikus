@@ -10,6 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.transaction.TransactionManager;
 import javax.validation.Valid;
 
 import medikus.bl.exception.ProjectException;
@@ -33,6 +34,7 @@ public class PatientService {
 
 	public RegisterPatientResponse registerPatient(@Valid RegisterPatientRequest registerPatientRequest)
 			throws ProjectException {
+		
 		PatientResponse patientResponse = new PatientResponse();
 		PatientEntity patientEntity = new PatientEntity();
 
@@ -42,9 +44,7 @@ public class PatientService {
 		patientEntity.setLname(registerPatientRequest.getPatientData().getSurname());
 		patientEntity.setSsn(registerPatientRequest.getPatientData().getSsn());
 		patientResponse.setPatient(registerPatientRequest.getPatientData());
-		em.persist(patientEntity);
-		em.flush();
-
+		em.persist(patientEntity);	
 		RegisterPatientResponse response = new RegisterPatientResponse();
 		response.setPatientData(patientResponse);
 		patientResponse.setPatientId(patientEntity.getId());

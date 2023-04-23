@@ -49,7 +49,6 @@ public class VisitService {
 		visitEntity.setType(registerVisitRequest.getVisitData().getType().toString());
 		visitEntity.setPatientBean(patientEntity);
 		em.persist(visitEntity);
-		em.flush();
 		VisitResponse visitResponse = new VisitResponse();
 		visitResponse.setVisit(registerVisitRequest.getVisitData());
 		visitResponse.setVisitId(visitEntity.getId());
